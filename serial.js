@@ -17,7 +17,7 @@ connectButton.addEventListener('click', async () => {
 });
 
 sendButton.addEventListener('click', async () => {
-    const command = commandInput.value;
+    const command = commandInput.value.split(' ');
     if (command) {
         await sendCommand(command);
     }
@@ -26,35 +26,83 @@ sendButton.addEventListener('click', async () => {
 async function sendCommand(command) {
     try {
         // Send initial bytes
-        await writer.write(new Uint8Array([0x55, 0xaa]));
-        let initialResponse = new Uint8Array(1);
-        ({ value: initialResponse } = await reader.read());
+        await sendInitialBytes();
+        const initialResponse = await readBytes(1);
+
         if (initialResponse[0] !== 0xcc) {
             console.error('No response from device or unexpected response');
             return;
         }
 
         // Send the actual command
-        if (command === 'info') {
-            await writer.write(new Uint8Array([0x04]));
-            // Read multiple bytes (for example, 29 bytes as in your Python code)
-            const expectedLength = 29;
-            let response = new Uint8Array(expectedLength);
-            let receivedLength = 0;
-
-            while (receivedLength < expectedLength) {
-                const { value, done } = await reader.read();
-                if (done) {
-                    console.error('Stream closed before receiving all expected data');
-                    break;
-                }
-                response.set(value, receivedLength);
-                receivedLength += value.length;
+        if (command[0] === 'info') {
+            await sendInfoCommand();
+            let response = await readBytes(29);
+            output.textContent += `Received: ${Array.from(response).map(byte => byte.toString(16).padStart(2, '0')).join(' ')}\n`;
+        } else if(command[0] === 'read') {
+            let addr = parseInt(command[1], 16);
+            let size = parseInt(command[2], 16);
+            
+            if(isNaN(addr)) {
+                addr = 0;
             }
 
+            if(isNaN(size)) {
+                size = 0;
+            }
+            
+            let response = await readMemory(addr, size);
             output.textContent += `Received: ${Array.from(response).map(byte => byte.toString(16).padStart(2, '0')).join(' ')}\n`;
         }
     } catch (err) {
         console.error('Failed to send command:', err);
     }
+}
+
+async function readMemory(addr, dataLen) {
+    try {
+        // await sendInitialBytes();
+        // const initialResponse = await readBytes(1);
+        // if (initialResponse[0] !== 0xcc) {
+        //     console.error('No response from device or unexpected response');
+        //     return null;
+        // }
+
+        const CMD_READ_MEM = 0x3; // Vervang dit door het juiste commando
+        await writer.write(new Uint8Array([CMD_READ_MEM]));
+        await writer.write(new Uint8Array([addr & 0xff, (addr >> 8) & 0xff, 0x00]));
+        await writer.write(new Uint8Array([dataLen & 0xff, (dataLen >> 8) & 0xff]));
+
+        // return await readBytes(dataLen);
+        return await readBytes(dataLen);
+    } catch (err) {
+        console.error('Failed to read memory:', err);
+        return null;
+    }
+}
+
+async function sendInitialBytes() {
+    await writer.write(new Uint8Array([0x55, 0xaa]));
+}
+
+async function sendInfoCommand() {
+    await writer.write(new Uint8Array([0x04]));
+}
+
+async function readBytes(length) {
+    let receivedBytes = new Uint8Array(length);
+    let receivedLength = 0;
+
+    while (receivedLength < length) {
+        const { value, done } = await reader.read();
+        if (done) {
+            console.error('Stream closed before receiving all expected data');
+            break;
+        }
+
+        receivedBytes.set(value, receivedLength);
+        receivedLength += value.length;
+    }
+
+    return receivedBytes;
 }
