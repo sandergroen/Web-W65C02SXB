@@ -1,0 +1,172 @@
+/* Definieer CSS-variabelen voor thema-kleuren */
+:root {
+  --primary-color: #28a745; /* Groene kleur */
+  --primary-color-hover: #218838;
+  --primary-color-disabled: #cccccc;
+  --input-border-color: #ccc;
+  --input-focus-border-color: #28a745;
+  --input-focus-shadow-color: rgba(40, 167, 69, 0.5);
+}
+
+/* Basis reset voor marges en padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Basis stijlen voor de body */
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  background-color: #f4f4f4;
+  color: #333;
+  padding: 20px;
+}
+
+.main {
+  min-height: 80vh;
+  display: grid;
+  grid-template-areas: "header" "main" "left-sidebar" "footer";     
+  gap: 1rem;
+  /* padding: 1rem; */
+}
+
+@media (min-width: 600px) {
+  .main {
+    grid-template: "header           header             header"         min-content
+                   "left-sidebar     main               main"  1fr
+                   "left-sidebar           footer             footer"         min-content
+               / minmax(auto, 250px) minmax(250px, 1fr) minmax(auto, 250px);    
+  }
+}
+
+header {
+  grid-area: header;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ccc;
+  padding: 10px 20px;
+  color: white;
+}
+
+.header-logo svg {
+  height: 96px;
+  width: 96px;
+}
+
+.header-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-button {
+  background-color: #575757;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.nav-button:hover {
+  background-color: #777;
+}
+
+.left-sidebar {
+  grid-area: left-sidebar;
+}
+
+main {
+  grid-area: main;
+  overflow-y: scroll;
+  max-height: 80vh;
+}
+
+main p:not(:first-of-type) {
+  margin-top: .5rem;
+}
+
+
+footer {
+  grid-area: footer;
+}
+
+.input-group {
+  display: flex;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+/* Stijlen voor de input in de input-groep */
+.input-group .input {
+  flex: 1;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: none;
+}
+
+/* Stijlen voor de knop in de input-groep */
+.input-group .button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Algemene stijlen voor knoppen */
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: var(--primary-color-hover);
+}
+
+.button:disabled {
+  background-color: var(--primary-color-disabled);
+  cursor: not-allowed;
+}
+
+.input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid var(--input-border-color);
+  border-radius: 4px;
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--input-focus-border-color);
+  box-shadow: 0 0 5px var(--input-focus-shadow-color);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.reg {
+  display: inline-block;
+  width: 30px;
+}
+
+.status-info {
+  margin-left: 40px;
+}
+
+#output {
+  width: 80%;
+  text-wrap: wrap;
+}

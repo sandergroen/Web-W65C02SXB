@@ -1,16 +1,94 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Web Serial API</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <h1>Serial Communication</h1>
-  <button id="connectButton">Connect</button>
-  <div id="controls" style="display: none;">
-    <input type="text" id="commandInput" placeholder="Enter command">
-    <button id="sendButton">Send</button>
-    <pre id="output"></pre>
+  <div class="main">
+    <header class="header">
+      <div class="header-logo">
+        <svg width="128" height="128" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <rect x="16" y="16" width="32" height="32" fill="none" stroke="#28a745" stroke-width="2" />
+          <rect x="22" y="22" width="20" height="20" fill="none" stroke="#28a745" stroke-width="2" />
+          <line x1="10" y1="18" x2="16" y2="18" stroke="#28a745" stroke-width="2" />
+          <line x1="10" y1="24" x2="16" y2="24" stroke="#28a745" stroke-width="2" />
+          <line x1="10" y1="30" x2="16" y2="30" stroke="#28a745" stroke-width="2" />
+          <line x1="10" y1="36" x2="16" y2="36" stroke="#28a745" stroke-width="2" />
+          <line x1="10" y1="42" x2="16" y2="42" stroke="#28a745" stroke-width="2" />
+          <line x1="10" y1="48" x2="16" y2="48" stroke="#28a745" stroke-width="2" />
+          <line x1="48" y1="18" x2="54" y2="18" stroke="#28a745" stroke-width="2" />
+          <line x1="48" y1="24" x2="54" y2="24" stroke="#28a745" stroke-width="2" />
+          <line x1="48" y1="30" x2="54" y2="30" stroke="#28a745" stroke-width="2" />
+          <line x1="48" y1="36" x2="54" y2="36" stroke="#28a745" stroke-width="2" />
+          <line x1="48" y1="42" x2="54" y2="42" stroke="#28a745" stroke-width="2" />
+          <line x1="48" y1="48" x2="54" y2="48" stroke="#28a745" stroke-width="2" />
+          <line x1="18" y1="10" x2="18" y2="16" stroke="#28a745" stroke-width="2" />
+          <line x1="24" y1="10" x2="24" y2="16" stroke="#28a745" stroke-width="2" />
+          <line x1="30" y1="10" x2="30" y2="16" stroke="#28a745" stroke-width="2" />
+          <line x1="36" y1="10" x2="36" y2="16" stroke="#28a745" stroke-width="2" />
+          <line x1="42" y1="10" x2="42" y2="16" stroke="#28a745" stroke-width="2" />
+          <line x1="48" y1="10" x2="48" y2="16" stroke="#28a745" stroke-width="2" />
+          <line x1="18" y1="48" x2="18" y2="54" stroke="#28a745" stroke-width="2" />
+          <line x1="24" y1="48" x2="24" y2="54" stroke="#28a745" stroke-width="2" />
+          <line x1="30" y1="48" x2="30" y2="54" stroke="#28a745" stroke-width="2" />
+          <line x1="36" y1="48" x2="36" y2="54" stroke="#28a745" stroke-width="2" />
+          <line x1="42" y1="48" x2="42" y2="54" stroke="#28a745" stroke-width="2" />
+          <line x1="48" y1="48" x2="48" y2="54" stroke="#28a745" stroke-width="2" />
+          <text x="32" y="34" text-anchor="middle" fill="#28a745" font-family="Arial" font-size="6">
+            6502
+          </text>
+        </svg>
+      </div>
+      <nav class="header-nav">
+        <button id="connectButton" class="button">Connect</button>
+        <div class="toolbar">
+          <button id="getstate" class="button">State</button>
+          <button id="getinfo" class="button">Info</button>
+        </div>
+      </nav>
+    </header>
+    <div class="left-sidebar">
+      <div class="form-group">
+        <label for="pc" class="reg">PC:</label>
+        <input type="text" name="pc" id="pc" disabled class="input" />
+      </div>
+      <div class="form-group">
+        <label for="a" class="reg">A:</label>
+        <input type="text" name="a" id="a" disabled class="input" />
+      </div>
+      <div class="form-group">
+        <label for="x" class="reg">X:</label>
+        <input type="text" name="x" id="x" disabled class="input" />
+      </div>
+      <div class="form-group">
+        <label for="y" class="reg">Y:</label>
+        <input type="text" name="y" id="y" disabled class="input" />
+      </div>
+      <div class="form-group">
+        <label for="sp" class="reg">SP:</label>
+        <input type="text" name="sp" id="sp" disabled class="input" />
+      </div>
+      <div class="form-group">
+        <label for="sr" class="reg">SR:</label>
+        <input type="text" name="sr" id="sr" disabled class="input" />
+        <div class="status-info">NV-BDIZC</div>
+      </div>
+    </div>
+    <main id="output">
+    </main>
+    <footer>
+      <div id="controls" style="display: none;">
+        <div class="input-group">
+          <input type="text" id="commandInput" placeholder="Enter command" class="input">
+          <button id="sendButton" class="button">Send</button>
+        </div>
+      </div>
   </div>
+  </footer>
   <script src="serial.js"></script>
 </body>
+
 </html>
